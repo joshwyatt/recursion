@@ -10,5 +10,19 @@ var stringifyJSON = function(obj) {
 		}
 		return item === null ? 'null' : Array.isArray(item) ? 'array' : 'object';
 	};
-	
+
+	var typeSpecificProcesses = {
+		'number' : function(num) {
+			return num;
+		}, 
+
+		'boolean' : function(bool) {
+			return bool;
+		}, 
+
+		'null' : function(nl) {
+			return 'null';
+		}
+	};
+
 };
