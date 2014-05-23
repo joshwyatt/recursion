@@ -8,6 +8,14 @@ var stringifyJSON = function(obj) {
 		console.log(JSON.stringify(value));
 	};
 
+	var j = function(value) {
+		return JSON.stringify(value);
+	};
+
+	var test = function(item) {
+		console.log(j(item) == recursivelyStringify(item));
+	};
+
 	var returnSpecificTypeOf = function(item) {
 		if (typeof item !== 'object') {
 			return typeof item;
@@ -34,7 +42,16 @@ var stringifyJSON = function(obj) {
 				result.push(recursivelyStringify(item));
 			});
 			return '[' + result.join(',') + ']';
+		},
+
+		'object' : function(obj) {
+			var result = [];
+			forEach(obj, function(value, key) {
+				result.push('"' + key + '"' + ':' + recursivelyStringify(value));
+			});
+			return '{' + result.join(',') + '}';
 		}
+		
 	};
 
 	var recursivelyStringify = function(item) {
