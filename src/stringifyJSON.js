@@ -26,7 +26,21 @@ var stringifyJSON = function(obj) {
 
 		'null' : function(nl) {
 			return 'null';
+		},
+
+		'array' : function(arr) {
+			var result = [];
+			forEach(arr, function(item) {
+				result.push(recursivelyStringify(item));
+			});
+			return '[' + result.join(',') + ']';
 		}
+	};
+
+	var recursivelyStringify = function(item) {
+		var specificType = returnSpecificTypeOf(item);
+		var typeSpecificProcess = typeSpecificProcesses[specificType];
+		return typeSpecificProcess(item);
 	};
 
 };
