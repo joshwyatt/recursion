@@ -4,6 +4,10 @@
 // but you don't so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
 
+	var js = function(value) {
+		console.log(JSON.stringify(value));
+	};
+
 	var returnSpecificTypeOf = function(item) {
 		if (typeof item !== 'object') {
 			return typeof item;
