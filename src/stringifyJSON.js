@@ -1,7 +1,7 @@
-// this is what you would do if you liked things to be easy:
+// this is what you would do if you didn't like to learn things:
 // var stringifyJSON = JSON.stringify;
 
-// but you don't so you're going to write it from scratch:
+// but you do, so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
 
 	var js = function(value) {
@@ -36,6 +36,14 @@ var stringifyJSON = function(obj) {
 			return 'null';
 		},
 
+		'undefined' : function() {
+			return undefined;
+		},
+
+		'function' : function() {
+			return undefined;
+		},
+
 		'array' : function(arr) {
 			var result = [];
 			forEach(arr, function(item) {
@@ -51,7 +59,7 @@ var stringifyJSON = function(obj) {
 			});
 			return '{' + result.join(',') + '}';
 		}
-		
+
 	};
 
 	var recursivelyStringify = function(item) {
