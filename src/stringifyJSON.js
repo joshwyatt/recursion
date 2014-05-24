@@ -58,6 +58,16 @@ var stringifyJSON = function(obj) {
 				result.push('"' + key + '"' + ':' + recursivelyStringify(value));
 			});
 			return '{' + result.join(',') + '}';
+		},
+
+		'string' : function(str) {
+			str = str.replace(/\\/g, '\\\\');
+			str = str.replace(/\n/g, '\\n');
+			str = str.replace(/\t/g, '\\t');
+			str = str.replace(/\r/g, '\\r');
+			str = str.replace(/\s\s+/g, ' ');
+			str = str.replace(/"/g, '\\"');
+			return '"' + str + '"';
 		}
 
 	};
