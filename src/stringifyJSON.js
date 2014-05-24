@@ -4,18 +4,21 @@
 // but you do, so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
 
-	var js = function(value) {
-		console.log(JSON.stringify(value));
+	// Helper function to iterate through arrays and objects
+  var forEach = function(collection, iterator) {
+		if (Array.isArray(collection)) {
+			for (var i = 0; i < collection.length; i++) {
+				iterator(collection[i], i, collection);
+			}
+		} else {
+			for (var k in collection) {
+				iterator(collection[k], k, collection);
+			}
+		}
 	};
 
-	var j = function(value) {
-		return JSON.stringify(value);
-	};
-
-	var test = function(item) {
-		console.log(j(item) == recursivelyStringify(item));
-	};
-
+	// Return a more fine-tuned differentiation of a value's type, especially
+	// with regard to objects than the native `typeof`
 	var returnSpecificTypeOf = function(item) {
 		if (typeof item !== 'object') {
 			return typeof item;
@@ -23,13 +26,16 @@ var stringifyJSON = function(obj) {
 		return item === null ? 'null' : Array.isArray(item) ? 'array' : 'object';
 	};
 
+	// This object contains all the methods necessary for stringifying all the different
+	// types of values
 	var typeSpecificProcesses = {
+
 		'number' : function(num) {
-			return num;
+			return String(num);
 		}, 
 
 		'boolean' : function(bool) {
-			return bool;
+			return String(bool);
 		}, 
 
 		'null' : function(nl) {
@@ -44,6 +50,8 @@ var stringifyJSON = function(obj) {
 			return undefined;
 		},
 
+		// Uses `recursivelyStringify` to handle nested arrays and arrays with objects, etc. to 
+		// any depth
 		'array' : function(arr) {
 			var result = [];
 			forEach(arr, function(item) {
@@ -52,14 +60,21 @@ var stringifyJSON = function(obj) {
 			return '[' + result.join(',') + ']';
 		},
 
+		// Uses `recursivelyStringify` to handle array and object values to any depth
 		'object' : function(obj) {
 			var result = [];
 			forEach(obj, function(value, key) {
-				result.push('"' + key + '"' + ':' + recursivelyStringify(value));
+				if (typeof value === 'function' || typeof value === 'undefined') {
+					return;
+				} else {
+					result.push('"' + key + '"' + ':' + recursivelyStringify(value));
+				}
 			});
 			return '{' + result.join(',') + '}';
 		},
 
+		// Uses regular expressions to mimic JSON.stringify's handling of escape characters, quotes
+		// and whitespaces more than one character long
 		'string' : function(str) {
 			str = str.replace(/\\/g, '\\\\');
 			str = str.replace(/\n/g, '\\n');
@@ -72,10 +87,14 @@ var stringifyJSON = function(obj) {
 
 	};
 
-	var recursivelyStringify = function(item) {
-		var specificType = returnSpecificTypeOf(item);
+	// Evaluates specific type of obj, locates proper method to process it, and calls that 
+	// method on the obj
+	var recursivelyStringify = function(obj) {
+		var specificType = returnSpecificTypeOf(obj);
 		var typeSpecificProcess = typeSpecificProcesses[specificType];
-		return typeSpecificProcess(item);
+		return typeSpecificProcess(obj);
 	};
+
+	return recursivelyStringify(obj);
 
 };
