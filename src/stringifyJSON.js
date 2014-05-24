@@ -1,7 +1,10 @@
-// this is what you would do if you didn't like to learn things:
+// this is what I might do if I didn't like to learn things:
 // var stringifyJSON = JSON.stringify;
 
-// but you do, so you're going to write it from scratch:
+// but I do, so I'm going to write it from scratch:
+
+// This function receives a value of any type, and returns a stringified version
+// of it analogous to JSON.stringify
 var stringifyJSON = function(obj) {
 
 	// Helper function to iterate through arrays and objects
@@ -38,7 +41,7 @@ var stringifyJSON = function(obj) {
 			return String(bool);
 		}, 
 
-		'null' : function(nl) {
+		'null' : function() {
 			return 'null';
 		},
 
