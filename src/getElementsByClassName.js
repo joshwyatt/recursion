@@ -28,22 +28,23 @@ var getElementsByClassName = function(className){
 			return node.childNodes.length > 0;
 		};
 
-		var results = [];
+		// var results = [];
 
-		var searchForClassNameRecursively = function(node, className) {
+		var searchForClassNameRecursively = function(node, className, results) {
 			if (hasTargetClass(className, node)) {
 				results.push(node);
 			}
 			if (hasChildNodes(node)) {
 				forEach(node.childNodes, function(childNode) {
 					if (typeof childNode === 'object') {
-						searchForClassNameRecursively(childNode, className);
+						searchForClassNameRecursively(childNode, className, results);
 					}
 				});
 			}
+			return results;
 		}
 
-		searchForClassNameRecursively(document.body, className);
-		return results;
+		return searchForClassNameRecursively(document.body, className, []);
+		// return results;
 };
 
